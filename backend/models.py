@@ -48,6 +48,8 @@ class Modulo(SQLModel, table=True):
     materia: Materia = Relationship(back_populates="moduli")
     docente: Docente = Relationship(back_populates="moduli")
     classe: Classe = Relationship(back_populates="moduli")
+
+    lezioni: list["Lezione"] = Relationship(back_populates="modulo")
     
 class Lezione(SQLModel, table=True):
     __tablename__: str = "lezioni"
@@ -56,4 +58,7 @@ class Lezione(SQLModel, table=True):
     fine: datetime
     # l'aula dipende dalla sede del corso, per semplicità uso una stringa per i primi casi di test
     aula: str | None = Field(default=None)
+
+    modulo_id: int = Field(foreign_key="moduli.id")
+    modulo: Modulo = Relationship(back_populates="lezioni")
 
