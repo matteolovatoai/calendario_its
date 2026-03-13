@@ -4,6 +4,6 @@ venv/
 .DS_Store
 # --- cache ---
 *.pyc
-**/__pycache__
+__pycache__/
 # --- secrets ---
 .env
