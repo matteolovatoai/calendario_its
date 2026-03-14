@@ -5,16 +5,11 @@ from backend.database import engine
 def test_creazione_modulo():
     with Session(engine) as session:
         classe = session.exec(select(Classe).where(Classe.nome == "LAMBDA")).first()
-        materia = Materia(nome="Materia A")
-        docente = Docente(nome="Docente A", cognome="Cognome")
-        session.add(materia)
-        session.add(docente)
-
-        session.commit()
-        session.refresh(materia)
+        docente = session.exec(select(Docente).where(Docente.nome == "Docente A")).first()
+        materia = session.exec(select(Materia).where(Materia.nome == "Materia A")).first()
         session.refresh(docente)
-        if materia.id and docente.id and classe and classe.id:
-            nuovo_modulo = Modulo(materia_id=materia.id, docente_id=docente.id, classe_id=classe.id)
+        if materia and materia.id and docente and docente.id and classe and classe.id:
+            nuovo_modulo = Modulo(materia_id=materia.id, docente_id=docente.id, classe_id=classe.id, ore_totali=5)
             session.add(nuovo_modulo)
             session.commit()
             print("🟢 Successo!")

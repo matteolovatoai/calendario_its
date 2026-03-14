@@ -40,7 +40,7 @@ class Modulo(SQLModel, table=True):
     Questo tipo di associazioni vengono fatte ad inizio anno 
     '''
     __tablename__: str = "moduli"
-    __table_args__ = UniqueConstraint("materia_id", "docente_id", "classe_id", name="unique_modulo")
+    __table_args__ = (UniqueConstraint("materia_id", "docente_id", "classe_id", name="unique_modulo"),)
     id: int | None = Field(default=None, primary_key=True)
 
     materia_id: int = Field(foreign_key="materie.id")
