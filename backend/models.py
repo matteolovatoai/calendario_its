@@ -1,3 +1,4 @@
+from sqlalchemy import UniqueConstraint
 from sqlmodel import SQLModel, Field, Relationship
 from datetime import datetime
 
@@ -39,11 +40,13 @@ class Modulo(SQLModel, table=True):
     Questo tipo di associazioni vengono fatte ad inizio anno 
     '''
     __tablename__: str = "moduli"
+    __table_args__ = UniqueConstraint("materia_id", "docente_id", "classe_id", name="unique_modulo")
     id: int | None = Field(default=None, primary_key=True)
 
     materia_id: int = Field(foreign_key="materie.id")
     docente_id: int = Field(foreign_key="docenti.id")
     classe_id: int = Field(foreign_key="classi.id")
+    ore_totali: int = Field(default=0, description="Monte ore totale previsto per questo modulo")
 
     materia: Materia = Relationship(back_populates="moduli")
     docente: Docente = Relationship(back_populates="moduli")
