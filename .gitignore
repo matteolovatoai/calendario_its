@@ -7,3 +7,5 @@ venv/
 __pycache__/
 # --- secrets ---
 .env
+# --- Data ---
+*.csv
