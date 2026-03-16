@@ -57,8 +57,8 @@ class Modulo(SQLModel, table=True):
 class Lezione(SQLModel, table=True):
     __tablename__: str = "lezioni"
     id: int | None = Field(default=None, primary_key=True)
-    inizio: datetime
-    fine: datetime
+    inizio: datetime = Field(index=True)
+    fine: datetime = Field(index=True)
     # l'aula dipende dalla sede del corso, per semplicità uso una stringa per i primi casi di test
     aula: str | None = Field(default=None)
 
