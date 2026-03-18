@@ -52,3 +52,12 @@ def update_lezione(lezione_id: int, dati_aggiornati: dict, session: Session = De
     session.commit()
     session.refresh(lezione)
     return lezione
+
+@app.delete("/lezioni/{id}")
+def delete_lezione(lezione_id: int, session: Session = Depends(get_session)):
+    lezione = session.get(Lezione, lezione_id)
+    if not lezione:
+        raise HTTPException(status_code=404, detail="Lezione non trovata")
+    session.delete(lezione)
+    session.commit()
+    return {"ok": True, "message": f"Lezione {lezione_id} eliminata"}
