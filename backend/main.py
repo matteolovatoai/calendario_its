@@ -1,8 +1,8 @@
 from datetime import datetime
 from fastapi import FastAPI, Depends, HTTPException
 from sqlmodel import Session, select
-from .models import Materia, Modulo, Lezione, Docente, Classe
-from .database import engine, get_session
+from .models import Materia, Modulo, Lezione, Docente
+from .database import get_session
 
 app = FastAPI()
 
