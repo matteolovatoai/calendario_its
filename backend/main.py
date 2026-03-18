@@ -1,7 +1,7 @@
 from datetime import datetime
 from fastapi import FastAPI, Depends, HTTPException
 from sqlmodel import Session, select
-from .models import Materia, Modulo, Lezione, Docente
+from .models import Materia, Modulo, Lezione, Docente, Classe
 from .database import engine, get_session
 
 app = FastAPI()
@@ -34,6 +34,20 @@ def insert_lezione(lezione: Lezione, session: Session = Depends(get_session)):
     modulo = session.get(Modulo, Lezione.modulo_id)
     if not modulo:
         raise HTTPException(status_code=404, detail="Modulo non trovato")
+    
+    if modulo.id:
+        conflitto = session.exec(select(Lezione).join(Modulo).where(
+            # la lezione inizia
+            Lezione.inizio < lezione.fine,
+            Lezione.fine > lezione.inizio,
+            (
+                Modulo.id == modulo.id | Modulo.docente_id == modulo.docente_id
+            )
+        )).first()
+
+    if conflitto:
+        raise HTTPException(status_code=400, detail="Conflitto, esiste già una lezione in questo slot orario per questa classe o docente")
+
     # Aggiungo la lezione
     session.add(lezione)
     session.commit()
