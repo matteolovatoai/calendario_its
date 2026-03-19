@@ -3,8 +3,23 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlmodel import Session, select
 from .models import Materia, Modulo, Lezione, Docente
 from .database import get_session
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# Configurazione CORS
+origins = [
+    "http://localhost:3000",
+    "localhost:3000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"], # Permette GET, POST, PATCH, DELETE, ecc.
+    allow_headers=["*"],
+)
 
 @app.get("/lezioni/")
 def get_lezione(session: Session = Depends(get_session), inizio: datetime | None = None, fine: datetime | None = None):
