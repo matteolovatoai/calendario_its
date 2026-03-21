@@ -1,7 +1,7 @@
 from datetime import datetime
 from fastapi import FastAPI, Depends, HTTPException
 from sqlmodel import Session, select
-from .models import Materia, Modulo, Lezione, Docente
+from .models import Materia, Modulo, Lezione, Docente, Classe
 from .database import get_session
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -22,12 +22,14 @@ app.add_middleware(
 )
 
 @app.get("/lezioni/")
-def get_lezione(session: Session = Depends(get_session), inizio: datetime | None = None, fine: datetime | None = None):
+def get_lezione(session: Session = Depends(get_session), inizio: datetime | None = None, fine: datetime | None = None, classe_id: int | None = None):
     statement = select(Lezione, Materia.nome, Docente.cognome).select_from(Lezione).join(Modulo).join(Docente).join(Materia)
     if inizio:
         statement = statement.where(Lezione.inizio >= inizio)
     if fine:
         statement = statement.where(Lezione.fine <= fine)
+    if classe_id:
+        statement = statement.where(Modulo.classe_id == classe_id)
     results = session.exec(statement).all()
 
     output = []
@@ -90,3 +92,8 @@ def delete_lezione(lezione_id: int, session: Session = Depends(get_session)):
     session.delete(lezione)
     session.commit()
     return {"ok": True, "message": f"Lezione {lezione_id} eliminata"}
+
+@app.get("/classi/")
+def get_classi(session: Session = Depends(get_session)):
+    classi = session.exec(select(Classe)).all()
+    return classi
