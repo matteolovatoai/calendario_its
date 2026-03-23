@@ -14,7 +14,7 @@ engine = create_engine(DATABASE_URL, echo=True) # echo true mostra a console i c
 def db_init():
     # Creazione tabelle sul db
     # Immporto perchè SQLModel deve capire a quali classi faccio riferimento
-    from .models import Materia, Docente, Classe, Modulo, Lezione
+    from .models import Modulo, Docente, Classe, Modulo_classe, Modulo_docente, Lezione
     SQLModel.metadata.create_all(engine)
 
 def get_session():
