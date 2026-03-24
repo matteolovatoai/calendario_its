@@ -56,7 +56,7 @@ def popola_db():
                 session.add(docente)
                 session.commit()
                 session.refresh(docente)
-            modulo_docente = session.exec(select(Modulo_docente).join(Modulo_classe).where(Modulo_classe.classe_id==classe.id, Modulo_docente.docente_id==docente.id)).first()
+            modulo_docente = session.exec(select(Modulo_docente).join(Modulo_classe).where(Modulo_classe.classe_id==classe.id, Modulo_docente.docente_id==docente.id, Modulo_classe.modulo_id==modulo.id)).first()
             if not modulo_docente:
                 modulo_docente = Modulo_docente(modulo_classe=modulo_classe, docente=docente)
                 session.add(modulo_docente)
