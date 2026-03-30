@@ -1,7 +1,7 @@
 from datetime import datetime
 from fastapi import FastAPI, Depends, HTTPException
 from sqlmodel import Session, select
-from .models import Materia, Modulo, Lezione, Docente, Classe
+from .models import Modulo, Modulo, Lezione, Docente, Classe, Modulo_classe, Modulo_docente
 from .database import get_session
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -23,13 +23,13 @@ app.add_middleware(
 
 @app.get("/lezioni/")
 def get_lezione(session: Session = Depends(get_session), inizio: datetime | None = None, fine: datetime | None = None, classe_id: int | None = None):
-    statement = select(Lezione, Materia.nome, Docente.cognome).select_from(Lezione).join(Modulo).join(Docente).join(Materia)
+    statement = select(Lezione, Modulo.nome, Docente.cognome).select_from(Lezione).join(Modulo_docente).join(Docente).join(Modulo_classe).join(Modulo)
     if inizio:
         statement = statement.where(Lezione.inizio >= inizio)
     if fine:
         statement = statement.where(Lezione.fine <= fine)
     if classe_id:
-        statement = statement.where(Modulo.classe_id == classe_id)
+        statement = statement.join(Modulo_classe).where(Modulo_classe.classe_id == classe_id)
     results = session.exec(statement).all()
 
     output = []
@@ -48,17 +48,18 @@ def get_lezione(session: Session = Depends(get_session), inizio: datetime | None
 @app.post("/lezioni/", status_code=201)
 def insert_lezione(lezione: Lezione, session: Session = Depends(get_session)):
     # Controllo se esiste il modulo
-    modulo = session.get(Modulo, Lezione.modulo_id)
-    if not modulo:
+    modulo_docente = session.get(Modulo_docente, Lezione.modulo_docente_id)
+    if not modulo_docente:
         raise HTTPException(status_code=404, detail="Modulo non trovato")
     
-    if modulo.id:
-        conflitto = session.exec(select(Lezione).join(Modulo).where(
-            # la lezione inizia
+    if modulo_docente.id and modulo_docente.modulo_classe_id:
+        conflitto = session.exec(select(Lezione).join(Modulo_docente).join(Modulo_classe).where(
+            # sovrapposizione di orari
             Lezione.inizio < lezione.fine,
             Lezione.fine > lezione.inizio,
             (
-                Modulo.id == modulo.id | Modulo.docente_id == modulo.docente_id
+                # controllo la sovrapposizione per la classe oppure per docente (il docente non puo fare piu lezioni in contemporanea)
+                (Modulo_classe.classe_id == modulo_docente.modulo_classe_id) | (Modulo_docente.docente_id == modulo_docente.docente_id)
             )
         )).first()
 
