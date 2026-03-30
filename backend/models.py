@@ -1,6 +1,9 @@
+from fastapi.datastructures import Default
 from sqlalchemy import UniqueConstraint
 from sqlmodel import SQLModel, Field, Relationship
 from datetime import datetime
+from enum import Enum
+from uuid import UUID
 
 # Modulo specifico (es. COD01 - Informatica)
 class Modulo(SQLModel, table=True):
@@ -30,6 +33,7 @@ class Classe(SQLModel, table=True):
     sede: str
 
     moduli_classe: list["Modulo_classe"] = Relationship(back_populates="classe")
+    studenti: list["Utente"] = Relationship(back_populates="classe")
 
 # questa suddivisione permette più docenti di insegnare lo stesso modulo alla stessa classe, matenendo un unico monteore
 class Modulo_classe(SQLModel, table=True):
@@ -68,3 +72,19 @@ class Lezione(SQLModel, table=True):
     aula: str | None = Field(default=None)
 
     modulo_docente: Modulo_docente = Relationship(back_populates="lezioni")
+
+class RuoloAccesso(str, Enum):
+    segreteria = "segreteria"
+    studente = "studente"
+
+class Utente(SQLModel, table=True):
+    id: UUID = Field(primary_key=True)
+    email: str = Field(unique=True, index=True)
+    nome: str
+    cognome: str
+
+    ruolo: RuoloAccesso = Field(default=RuoloAccesso.studente, nullable=False)
+
+    classe_id: int | None = Field(default=None, foreign_key="classi.id")
+
+    classe: Classe = Relationship(back_populates="studenti")
