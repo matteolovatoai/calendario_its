@@ -1,7 +1,7 @@
 from datetime import datetime
 from fastapi import FastAPI, Depends, HTTPException
 from sqlmodel import Session, select
-from .models import Modulo, Modulo, Lezione, Docente, Classe, Modulo_classe, Modulo_docente
+from .models import Modulo, Lezione, Docente, Classe, Modulo_classe, Modulo_docente
 from .database import get_session
 from fastapi.middleware.cors import CORSMiddleware
 
