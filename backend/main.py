@@ -30,7 +30,7 @@ def get_lezione(session: Session = Depends(get_session), inizio: datetime | None
     if fine:
         statement = statement.where(Lezione.fine <= fine)
     if current_user.ruolo == RuoloAccesso.studente:
-        statement = statement.where(Modulo_classe.classe_id == current_user.ruolo)
+        statement = statement.where(Modulo_classe.classe_id == current_user.classe_id)
     results = session.exec(statement).all()
 
     output = []

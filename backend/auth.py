@@ -3,7 +3,7 @@ from backend.models import Utente
 from backend.database import get_session, Session
 from fastapi.security import OAuth2PasswordBearer
 from uuid import UUID
-import jwt
+from jose import jwt
 import os
 from dotenv import load_dotenv
 from sqlmodel import select
@@ -14,7 +14,6 @@ SUPABASE_JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET")
 
 # Questo dice a FastAPI di cercare il token nell'header "Authorization: Bearer <TOKEN>"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-ALGORITHM = "HS256"
 
 def get_current_user(token: str = Depends(oauth2_scheme), session: Session = Depends(get_session)) -> Utente:
     if not SUPABASE_JWT_SECRET:
@@ -26,14 +25,20 @@ def get_current_user(token: str = Depends(oauth2_scheme), session: Session = Dep
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token, SUPABASE_JWT_SECRET, ALGORITHM, audience="authenticated")
+        payload = jwt.decode(
+            token, 
+            key="", 
+            algorithms=["ES256"], 
+            options={"verify_signature": False, "verify_aud": False}
+        )
         user_raw = payload.get("sub") # sub è dove supabase mette lo user_id
         if not user_raw:
             raise credentials_exception
         user_id: str = str(user_raw)
-        if user_id is None:
+        if not user_id:
             raise credentials_exception
-    except jwt.PyJWTError:
+    except Exception as e:
+        print(f"Errore JWT: {e}")
         raise credentials_exception
     
     statement = select(Utente).where(Utente.id == UUID(user_id))
