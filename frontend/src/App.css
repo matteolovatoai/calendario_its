@@ -1,153 +1,173 @@
-html, body, #root {
-  height: 100vh;
-  margin: 0;
-  overflow: hidden; /* Impedisce lo scorrimento di tutta la pagina */
+html,
+body,
+#root {
+    height: 100% !important;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden; /* Impedisce lo scorrimento di tutta la pagina */
 }
 
 /* Struttura base */
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background-color: #f1f5f9; /* Sfondo pagina leggermente grigio */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f1f5f9; /* Sfondo pagina leggermente grigio */
 }
 
 .page-container {
-  flex: 1; /* Prende tutto lo spazio rimasto sotto la navbar */
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; /* Protezione extra */
+    flex: 1; /* Prende tutto lo spazio rimasto sotto la navbar */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Protezione extra */
 }
 
 /* Navbar */
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 2rem;
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 2rem;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .logo {
-  display: flex;
-  flex-direction: row; /* Icona e scritta sulla stessa riga */
-  align-items: center; /* Centra verticalmente l'icona con il testo */
-  gap: 12px;           /* Spazio tra icona e scritta */
-  cursor: pointer;
+    display: flex;
+    flex-direction: row; /* Icona e scritta sulla stessa riga */
+    align-items: center; /* Centra verticalmente l'icona con il testo */
+    gap: 12px; /* Spazio tra icona e scritta */
+    cursor: pointer;
 }
 
 .logo h1 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
 }
 
 .nav-links {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 .nav-item {
-  text-decoration: none;
-  color: #64748b;
-  font-weight: 500;
-  transition: color 0.2s;
+    text-decoration: none;
+    color: #64748b;
+    font-weight: 500;
+    transition: color 0.2s;
 }
 
 .nav-item:hover {
-  color: #4f46e5;
+    color: #4f46e5;
 }
 
 .login-btn {
-  background-color: #4f46e5;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.2s;
+    background-color: #4f46e5;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
 }
 
 .login-btn:hover {
-  background-color: #4338ca;
-  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
-}
-
-/* Contenitore filtri in Home.jsx */
-.filter-bar {
-  background: #ffffff;
-  padding: 1rem 2rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  border-bottom: 1px solid #e2e8f0;
+    background-color: #4338ca;
+    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
 }
 
 .filter-bar label {
-  font-weight: 600;
-  color: #475569;
-  font-size: 0.9rem;
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.9rem;
 }
 
 /* La Select Box */
 .modern-select {
-  appearance: none; /* Rimuove lo stile di default del browser */
-  background-color: #f8fafc;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 0.5rem 2.5rem 0.5rem 1rem;
-  font-size: 0.95rem;
-  color: #1e293b;
-  cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.7rem center;
-  background-size: 1.2rem;
-  transition: all 0.2s ease;
+    appearance: none; /* Rimuove lo stile di default del browser */
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
+    font-size: 0.95rem;
+    color: #1e293b;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 1.2rem;
+    transition: all 0.2s ease;
 }
 
 .modern-select:hover {
-  border-color: #94a3b8;
+    border-color: #94a3b8;
 }
 
 .modern-select:focus {
-  outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-  background-color: #fff;
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    background-color: #fff;
 }
 
 .calendar-card {
-  flex: 1; /* Si allunga per riempire lo spazio */
-  margin: 1rem;
-  padding: 1rem;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; /* Impedisce alla card di "esplodere" verso il basso */
+    flex: 1; /* Si allunga per riempire lo spazio */
+    margin: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Impedisce alla card di "esplodere" verso il basso */
 }
 
 /* Correzione per FullCalendar per farlo sembrare più leggero */
 .fc {
-  --fc-border-color: #e2e8f0;
-  --fc-button-bg-color: #4f46e5;
-  --fc-button-border-color: #4f46e5;
-  --fc-button-hover-bg-color: #4338ca;
-  --fc-today-bg-color: #f8fafc;
+    --fc-border-color: #e2e8f0;
+    --fc-button-bg-color: #4f46e5;
+    --fc-button-border-color: #4f46e5;
+    --fc-button-hover-bg-color: #4338ca;
+    --fc-today-bg-color: #f8fafc;
 }
 
 .fc .fc-toolbar-title {
-  font-size: 1.4rem !important;
-  color: #1e293b;
-  font-weight: 700;
+    font-size: 1.4rem !important;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-nome {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.logout-btn {
+    background-color: #ef4444; /* Rosso per il logout */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.logout-btn:hover {
+    background-color: #dc2626;
 }
