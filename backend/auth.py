@@ -1,3 +1,5 @@
+import json
+
 from fastapi import Depends, status, HTTPException
 from backend.models import Utente
 from backend.database import get_session, Session
@@ -10,14 +12,14 @@ from sqlmodel import select
 
 load_dotenv()
 
-SUPABASE_JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET")
+SUPABASE_JWK_PUBLIC = os.getenv("SUPABASE_JWK_PUBLIC")
 
 # Questo dice a FastAPI di cercare il token nell'header "Authorization: Bearer <TOKEN>"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 def get_current_user(token: str = Depends(oauth2_scheme), session: Session = Depends(get_session)) -> Utente:
-    if not SUPABASE_JWT_SECRET:
-        raise ValueError("ERRORE: SUPABASE_JWT_SECRET non trovata nel file .env")
+    if not SUPABASE_JWK_PUBLIC:
+        raise ValueError("ERRORE: SUPABASE_JWK non trovata nel file .env")
 
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -25,11 +27,13 @@ def get_current_user(token: str = Depends(oauth2_scheme), session: Session = Dep
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
+        public_key=json.loads(SUPABASE_JWK_PUBLIC)
         payload = jwt.decode(
             token, 
-            key="", 
+            key=public_key, 
             algorithms=["ES256"], 
-            options={"verify_signature": False, "verify_aud": False}
+            options={"verify_signature": True, "verify_aud": True},
+            audience="authenticated"
         )
         user_raw = payload.get("sub") # sub è dove supabase mette lo user_id
         if not user_raw:
