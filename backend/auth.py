@@ -1,7 +1,7 @@
 import json
 
 from fastapi import Depends, status, HTTPException
-from backend.models import Utente
+from backend.models import Utente, RuoloAccesso
 from backend.database import get_session, Session
 from fastapi.security import OAuth2PasswordBearer
 from uuid import UUID
@@ -51,4 +51,9 @@ def get_current_user(token: str = Depends(oauth2_scheme), session: Session = Dep
     if not user:
         raise HTTPException(status_code=404, detail="Utente non trovato nel database")
 
+    return user
+
+def get_user_segreteria(user: Utente = Depends(get_current_user)) -> Utente:
+    if user.ruolo != RuoloAccesso.segreteria:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Questa è un'area riservata")
     return user
