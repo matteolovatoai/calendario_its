@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { supabase } from "../supabaseClient";
+import { useAuth } from '../AuthContext';
 
 const Navbar = ({ session }) => {
+    const { utenteDB } = useAuth()
     const handleLogout = async () => {
         const { error } = await supabase.auth.signOut();
         if (error) console.error("Errore durante il logout:", error.message);
@@ -20,7 +22,9 @@ const Navbar = ({ session }) => {
                 {/* Mostriamo l'email dell'utente e il tasto Logout se loggato */}
                 {session && (
                     <div className="user-menu">
-                        <span className="user-nome">{session.user.email}</span>
+                        <span>
+                            {utenteDB?.nome} {utenteDB?.cognome}
+                        </span>
                         <button onClick={handleLogout} className="logout-btn">
                             Esci
                         </button>

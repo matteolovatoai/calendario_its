@@ -4,7 +4,7 @@ from sqlmodel import Session, select
 from .models import Modulo, Lezione, Docente, Classe, Modulo_classe, Modulo_docente, RuoloAccesso, Utente
 from .database import get_session
 from fastapi.middleware.cors import CORSMiddleware
-from backend.auth import get_current_user
+from backend.auth import get_current_user, get_user_segreteria
 
 app = FastAPI()
 
@@ -47,11 +47,9 @@ def get_lezione(session: Session = Depends(get_session), inizio: datetime | None
     return output
 
 @app.post("/lezioni/", status_code=status.HTTP_201_CREATED)
-def insert_lezione(lezione: Lezione, session: Session = Depends(get_session), current_user: Utente = Depends(get_current_user)):
-    if current_user.ruolo != RuoloAccesso.segreteria:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Solo la segreteria può inserire le lezioni")
+def insert_lezione(lezione: Lezione, session: Session = Depends(get_session), current_user: Utente = Depends(get_user_segreteria)):
     # Controllo se esiste il modulo
-    modulo_docente = session.get(Modulo_docente, Lezione.modulo_docente_id)
+    modulo_docente = session.get(Modulo_docente, lezione.modulo_docente_id)
     if not modulo_docente:
         raise HTTPException(status_code=404, detail="Modulo non trovato")
     
@@ -62,7 +60,7 @@ def insert_lezione(lezione: Lezione, session: Session = Depends(get_session), cu
             Lezione.fine > lezione.inizio,
             (
                 # controllo la sovrapposizione per la classe oppure per docente (il docente non puo fare piu lezioni in contemporanea)
-                (Modulo_classe.classe_id == modulo_docente.modulo_classe_id) | (Modulo_docente.docente_id == modulo_docente.docente_id)
+                (Modulo_classe.classe_id == modulo_docente.modulo_classe.classe_id) | (Modulo_docente.docente_id == modulo_docente.docente_id)
             )
         )).first()
 
@@ -75,10 +73,8 @@ def insert_lezione(lezione: Lezione, session: Session = Depends(get_session), cu
     session.refresh(lezione)
     return lezione
 
-@app.patch("/lezioni/{id}", response_model=Lezione)
-def update_lezione(lezione_id: int, dati_aggiornati: dict, session: Session = Depends(get_session), current_user: Utente = Depends(get_current_user)):
-    if current_user.ruolo != RuoloAccesso.segreteria:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Solo la segreteria può modificare le lezioni")
+@app.patch("/lezioni/{lezione_id}", response_model=Lezione)
+def update_lezione(lezione_id: int, dati_aggiornati: dict, session: Session = Depends(get_session), current_user: Utente = Depends(get_user_segreteria)):
     lezione = session.get(Lezione, lezione_id)
     if not lezione:
         raise HTTPException(status_code=404, detail="Lezione non trovata")
@@ -90,10 +86,8 @@ def update_lezione(lezione_id: int, dati_aggiornati: dict, session: Session = De
     session.refresh(lezione)
     return lezione
 
-@app.delete("/lezioni/{id}")
-def delete_lezione(lezione_id: int, session: Session = Depends(get_session), current_user: Utente = Depends(get_current_user)):
-    if current_user.ruolo != RuoloAccesso.segreteria:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Solo la segreteria può cancellare le lezioni")
+@app.delete("/lezioni/{lezione_id}")
+def delete_lezione(lezione_id: int, session: Session = Depends(get_session), current_user: Utente = Depends(get_user_segreteria)):
     lezione = session.get(Lezione, lezione_id)
     if not lezione:
         raise HTTPException(status_code=404, detail="Lezione non trovata")
@@ -105,3 +99,8 @@ def delete_lezione(lezione_id: int, session: Session = Depends(get_session), cur
 def get_classi(session: Session = Depends(get_session)):
     classi = session.exec(select(Classe)).all()
     return classi
+
+@app.get("/utenti/me", response_model=Utente)
+def get_user_profile(user: Utente = Depends(get_current_user)):
+    # ritorna le info dell'utente cosi il front end sa il ruolo dell'utente
+    return user

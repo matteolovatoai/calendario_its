@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import "./App.css"
+import { AuthProvider } from "./AuthContext";
 
 function App() {
     const [session, setSession] = useState(null);
@@ -31,15 +32,17 @@ function App() {
     }
 
     return (
-        <Router>
-            <div className="wrapper">
-                <Navbar session={session} />
-                <Routes>
-                    <Route path="/" element={<Home session={session} />} />
-                    <Route path="/dashboard" element={<div>Dashboard</div>} />
-                </Routes>
-            </div>
-        </Router>
+        <AuthProvider>
+            <Router>
+                <div className="wrapper">
+                    <Navbar session={session} />
+                    <Routes>
+                        <Route path="/" element={<Home session={session} />} />
+                        <Route path="/dashboard" element={<div>Dashboard</div>} />
+                    </Routes>
+                </div>
+            </Router>
+        </AuthProvider>
     );
 }
 
