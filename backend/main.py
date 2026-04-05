@@ -4,7 +4,7 @@ from sqlmodel import Session, select
 from models import Modulo, Lezione, Docente, Classe, Modulo_classe, Modulo_docente, RuoloAccesso, Utente
 from database import get_session
 from fastapi.middleware.cors import CORSMiddleware
-from backend.auth import get_current_user, get_user_segreteria
+from auth import get_current_user, get_user_segreteria
 
 app = FastAPI()
 
