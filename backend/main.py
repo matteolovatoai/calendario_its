@@ -23,7 +23,7 @@ app.add_middleware(
 )
 
 @app.get("/lezioni/")
-def get_lezione(session: Session = Depends(get_session), inizio: datetime | None = None, fine: datetime | None = None, current_user: Utente = Depends(get_current_user)):
+def get_lezione(session: Session = Depends(get_session), inizio: datetime | None = None, fine: datetime | None = None, classe_id: int | None = None, current_user: Utente = Depends(get_current_user)):
     statement = select(Lezione, Modulo.nome, Docente.cognome).select_from(Lezione).join(Modulo_docente).join(Docente).join(Modulo_classe).join(Modulo)
     if inizio:
         statement = statement.where(Lezione.inizio >= inizio)
@@ -31,6 +31,9 @@ def get_lezione(session: Session = Depends(get_session), inizio: datetime | None
         statement = statement.where(Lezione.fine <= fine)
     if current_user.ruolo == RuoloAccesso.studente:
         statement = statement.where(Modulo_classe.classe_id == current_user.classe_id)
+    # se segreteria allora prende la classe dal menu a tendina
+    if current_user.ruolo == RuoloAccesso.segreteria:
+        statement = statement.where(Modulo_classe.classe_id == classe_id)
     results = session.exec(statement).all()
 
     output = []
@@ -41,7 +44,9 @@ def get_lezione(session: Session = Depends(get_session), inizio: datetime | None
             "inizio": lezione.inizio,
             "fine": lezione.fine,
             "materia": materia_nome,
-            "docente_cognome": docente_cognome
+            "docente_cognome": docente_cognome,
+            "modulo_docente_id": lezione.modulo_docente_id,
+            "aula": lezione.aula
             })
 
     return output
@@ -104,3 +109,17 @@ def get_classi(session: Session = Depends(get_session)):
 def get_user_profile(user: Utente = Depends(get_current_user)):
     # ritorna le info dell'utente cosi il front end sa il ruolo dell'utente
     return user
+
+@app.get("/opzioni-moduli-docenti/")
+def get_opzioni_moduli(classe_id: int | None = None, session: Session = Depends(get_session), user: Utente = Depends(get_user_segreteria)):
+    statement = select(Modulo_docente.id, Docente.cognome, Modulo.nome).select_from(Modulo_docente).join(Docente).join(Modulo_classe).join(Modulo)
+    if classe_id:
+        statement.where(Modulo_classe.classe_id == classe_id)
+    results = session.exec(statement).all()
+    options = []
+    for modulo_docente, docente, modulo in results:
+        options.append({
+            "id": modulo_docente,
+            "label": f"{docente} - {modulo}"
+            })
+    return options

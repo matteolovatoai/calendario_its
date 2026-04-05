@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     // Funzione per scaricare i dati dal tuo DB FastAPI
     const fetchProfiloDB = async (token) => {
       try {
-        const response = await fetch('http://localhost:8000/utenti/me', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/utenti/me`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

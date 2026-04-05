@@ -18,7 +18,7 @@ const Login = () => {
     useEffect(() => {
         if (isRegistering) {
             axios
-                .get("http://127.0.0.1:8000/classi/")
+                .get(`${import.meta.env.VITE_API_URL}/classi/`)
                 .then((res) => setClassi(res.data))
                 .catch((err) =>
                     console.error("Errore caricamento classi:", err),
