@@ -1,8 +1,8 @@
 import json
 
 from fastapi import Depends, status, HTTPException
-from backend.models import Utente, RuoloAccesso
-from backend.database import get_session, Session
+from models import Utente, RuoloAccesso
+from database import get_session, Session
 from fastapi.security import OAuth2PasswordBearer
 from uuid import UUID
 from jose import jwt
