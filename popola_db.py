@@ -40,7 +40,7 @@ def popola_db():
                 session.refresh(modulo)
             modulo_classe = session.exec(select(Modulo_classe).where(Modulo_classe.classe_id==classe.id, Modulo_classe.modulo_id==modulo.id)).first()
             if not modulo_classe:
-                if modulo_materia == "GITA MORATO PANE" or modulo_materia == "GITA AMER" or modulo_materia == "ESAME" or modulo_materia == "ARTIFEX - Centro Culturale Altinate - San Gaetano, via Altinate, 71 - Padova" or modulo_materia == "speed date Stage":
+                if modulo_materia == "GITA MORATO PANE" or modulo_materia == "GITA AMER" or modulo_materia == "ESAME" or modulo_materia == "ARTIFEX - Centro Culturale Altinate - San Gaetano, via Altinate, 71 - Padova" or modulo_materia == "speed date Stage":
                     totale_ore = 0
                 else:
                     print("🟢", modulo_materia, df_moduli_ore.loc[df_moduli_ore["materia"] == modulo_materia]["totale_ore"].shape)

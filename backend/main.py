@@ -124,3 +124,7 @@ def get_opzioni_moduli(classe_id: int | None = None, session: Session = Depends(
             "label": f"{docente} - {modulo}"
             })
     return options
+
+@app.get("/ping")
+def get_ping():
+    return "OK"
