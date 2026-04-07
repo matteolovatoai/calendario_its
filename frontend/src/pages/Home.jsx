@@ -15,7 +15,6 @@ const Home = () => {
     const [classi, setClassi] = useState([]);
     const [classeSelezionata, setClasseSelezionata] = useState("");
     const [eventi, setEventi] = useState([]);
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     
     // Stati Modale e Form
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -154,10 +153,10 @@ const Home = () => {
     // Schermata Selezione Classe (Solo Segreteria)
     if (isSegreteria && !classeSelezionata) {
         return (
-            <div className="page-container" style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <div className="page-container centered-page">
                 <div className="auth-card" style={{ textAlign: 'center' }}>
                     <h2>Gestione Calendari</h2>
-                    <p style={{ color: '#64748b', marginBottom: '20px' }}>Seleziona una classe per gestire il calendario.</p>
+                    <p className="text-muted" style={{ marginBottom: '20px' }}>Seleziona una classe per gestire il calendario.</p>
                     <select 
                         className="modern-select"
                         value={classeSelezionata}
@@ -177,11 +176,11 @@ const Home = () => {
             <div className="calendar-card">
                 
                 {/* HEADER */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <div className="calendar-header">
                     {isSegreteria ? (
-                        <div>
-                            <h2 style={{ margin: 0, display: 'inline-block', marginRight: '15px' }}>Calendario Classe</h2>
-                            <button onClick={() => setClasseSelezionata("")} style={{ background: 'none', border: 'none', color: '#4f46e5', cursor: 'pointer', textDecoration: 'underline' }}>
+                        <div className="title-group">
+                            <h2>Calendario Classe</h2>
+                            <button onClick={() => setClasseSelezionata("")} className="btn-link">
                                 (Cambia classe)
                             </button>
                         </div>
@@ -197,7 +196,7 @@ const Home = () => {
                 {/* CALENDARIO */}
                 <FullCalendar
                     plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
-                    initialView={"timeGridWeek"}
+                    initialView="timeGridWeek"
                     locale="it"
                     events={eventi}
                     slotMinTime="08:00:00"
@@ -223,7 +222,7 @@ const Home = () => {
                     <div className="modal-content">
                         <h3>{lezioneSelezionata ? "Modifica Lezione" : "Aggiungi Nuova Lezione"}</h3>
                         
-                        <form onSubmit={handleSalvaLezione} style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '20px' }}>
+                        <form onSubmit={handleSalvaLezione} className="modal-form">
                             <div className="input-group">
                                 <label>Materia, Docente e Classe</label>
                                 <select 
@@ -241,12 +240,12 @@ const Home = () => {
                                 </select>
                             </div>
 
-                            <div style={{ display: 'flex', gap: '10px' }}>
-                                <div className="input-group" style={{ flex: 1 }}>
+                            <div className="form-row">
+                                <div className="input-group">
                                     <label>Inizio</label>
                                     <input type="datetime-local" value={formData.inizio} onChange={(e) => setFormData({...formData, inizio: e.target.value})} required />
                                 </div>
-                                <div className="input-group" style={{ flex: 1 }}>
+                                <div className="input-group">
                                     <label>Fine</label>
                                     <input type="datetime-local" value={formData.fine} onChange={(e) => setFormData({...formData, fine: e.target.value})} required />
                                 </div>
@@ -257,15 +256,15 @@ const Home = () => {
                                 <input type="text" placeholder="Es: Aula Magna" value={formData.aula} onChange={(e) => setFormData({...formData, aula: e.target.value})} />
                             </div>
 
-                            <div style={{ display: 'flex', gap: '10px', marginTop: '10px', justifyContent: 'flex-end' }}>
+                            <div className="modal-actions">
                                 {/* Tasto elimina appare solo in modifica */}
                                 {lezioneSelezionata && (
-                                    <button type="button" onClick={handleElimina} style={{ marginRight: 'auto', padding: '8px 16px', borderRadius: '6px', backgroundColor: '#ef4444', color: 'white', border: 'none', cursor: 'pointer' }}>
+                                    <button type="button" onClick={handleElimina} className="btn-danger">
                                         Elimina
                                     </button>
                                 )}
                                 
-                                <button type="button" onClick={() => setIsModalOpen(false)} style={{ padding: '8px 16px', border: '1px solid #cbd5e1', borderRadius: '6px', background: 'white', cursor: 'pointer' }}>
+                                <button type="button" onClick={() => setIsModalOpen(false)} className="btn-secondary">
                                     Annulla
                                 </button>
                                 <button type="submit" className="login-btn">

@@ -200,6 +200,100 @@ body,
     color: #1e293b;
 }
 
+/* --- STILI SPECIFICI PER LA HOME E LA MODALE --- */
+
+/* Centra il contenuto nella pagina (usato per la selezione classe) */
+.centered-page {
+    justify-content: center;
+    align-items: center;
+}
+
+/* Intestazione del calendario */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.title-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.title-group h2 {
+    margin: 0;
+}
+
+/* Bottone testuale (es. "Cambia classe") */
+.btn-link {
+    background: none;
+    border: none;
+    color: #4f46e5;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    font-size: 0.9rem;
+}
+
+/* Form dentro la modale */
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.form-row .input-group {
+    flex: 1;
+}
+
+/* Bottoni in fondo alla modale */
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.btn-danger {
+    margin-right: auto; /* Lo spinge tutto a sinistra */
+    padding: 8px 16px;
+    border-radius: 6px;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626;
+}
+
+.btn-secondary {
+    padding: 8px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: white;
+    color: #475569;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #f1f5f9;
+}
+
 @media (max-width: 768px) {
     .fc-header-toolbar {
         flex-direction: column !important; 
@@ -215,5 +309,13 @@ body,
     
     .fc .fc-toolbar-title {
         font-size: 1.2rem !important;
+    }
+
+    .calendar-card {
+        margin: 0; /* Rimuove lo spazio vuoto esterno */
+        border-radius: 0; /* Rimuove gli angoli arrotondati (stanno male se tocca i bordi) */
+        border-left: none; /* Rimuove i bordi laterali */
+        border-right: none;
+        padding: 1rem 0.5rem; /* Mantiene un po' di spazio sopra/sotto, ma stringe ai lati */
     }
 }
