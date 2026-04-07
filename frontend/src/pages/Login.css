@@ -217,10 +217,45 @@ textarea {
     background-color: #ffffff;
 }
 
-/* Per i dispositivi mobile */
-@media (max-width: 768px) {
+/* Quando lo schermo è piccolo in altezza (tipico dei telefoni) */
+@media (max-height: 700px), (max-width: 768px) {
     .modern-select {
         max-width: 100%;
         font-size: 16px; /* Evita lo zoom automatico su iOS */
+    }
+    .auth-wrapper {
+        /* Cambiamo l'altezza fissa in altezza minima */
+        height: auto;
+        min-height: 100vh;
+        /* Allineiamo in alto invece che al centro */
+        align-items: flex-start;
+        /* Aggiungiamo padding verticale per dare respiro */
+        padding: 2rem 1rem;
+        overflow-y: auto; /* fa scorrere SOLO questa pagina se serve! */
+    }
+
+    .auth-card {
+        /* Permettiamo alla scheda di allungarsi se serve */
+        height: auto;
+        /* Margine in basso per non farla toccare il bordo */
+        margin-bottom: 1rem;
+    }
+    
+    .auth-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px; /* Spazio tra icona e titolo */
+        margin-bottom: 1.5rem; /* Riduciamo un po' il margine inferiore */
+    }
+
+    .auth-icon {
+        display: inline-block;
+        font-size: 2rem; /* Rimpiccioliamo l'icona (prima era 3rem) */
+        margin-bottom: 0; /* Togliamo il margine sotto l'icona */
+    }
+
+    .auth-header h1 {
+        font-size: 1.4rem; /* Rimpiccioliamo leggermente il titolo */
     }
 }
