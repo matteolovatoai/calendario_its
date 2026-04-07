@@ -231,7 +231,6 @@ textarea {
         align-items: flex-start;
         /* Aggiungiamo padding verticale per dare respiro */
         padding: 2rem 1rem;
-        overflow-y: auto; /* fa scorrere SOLO questa pagina se serve! */
     }
 
     .auth-card {
@@ -240,7 +239,7 @@ textarea {
         /* Margine in basso per non farla toccare il bordo */
         margin-bottom: 1rem;
     }
-    
+
     .auth-header {
         display: flex;
         align-items: center;
