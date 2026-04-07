@@ -199,7 +199,7 @@ const Home = () => {
                 {/* CALENDARIO */}
                 <FullCalendar
                     plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
-                    initialView={isMobile ? "timeGridDay" : "timeGridWeek"}
+                    initialView={"timeGridWeek"}
                     locale="it"
                     events={eventi}
                     slotMinTime="08:00:00"
@@ -209,9 +209,9 @@ const Home = () => {
                     height="100%"
                     handleWindowResize={true}
                     headerToolbar={{
-                        left: isMobile ? "prev,next" : "prev,next today",
+                        left: "prev,next today",
                         center: "title",
-                        right: isMobile ? "today" : "dayGridMonth,timeGridWeek",
+                        right: "dayGridMonth,timeGridWeek",
                     }}
                     buttonText={{ today: "Oggi", month: "Mese", week: "Settimana", day: "Giorno" }}
                     eventClick={handleEventClick}

@@ -199,3 +199,21 @@ body,
     margin-top: 0;
     color: #1e293b;
 }
+
+@media (max-width: 768px) {
+    .fc-header-toolbar {
+        flex-direction: column !important; 
+        gap: 12px; 
+        margin-bottom: 1rem !important;
+    }
+
+    .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center; 
+        width: 100%;
+    }
+    
+    .fc .fc-toolbar-title {
+        font-size: 1.2rem !important;
+    }
+}
