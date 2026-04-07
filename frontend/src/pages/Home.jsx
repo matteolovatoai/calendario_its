@@ -185,9 +185,7 @@ const Home = () => {
                                 (Cambia classe)
                             </button>
                         </div>
-                    ) : (
-                        <h2 style={{ margin: 0 }}>Il Mio Calendario</h2>
-                    )}
+                    ) : "" }
                     
                     {isSegreteria && (
                         <button onClick={() => { setLezioneSelezionata(null); setIsModalOpen(true); }} className="login-btn">
