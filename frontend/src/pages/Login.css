@@ -229,8 +229,7 @@ textarea {
         min-height: 100vh;
         /* Allineiamo in alto invece che al centro */
         align-items: flex-start;
-        /* Aggiungiamo padding verticale per dare respiro */
-        padding: 2rem 1rem;
+        padding: 0;
     }
 
     .auth-card {
@@ -256,5 +255,9 @@ textarea {
 
     .auth-header h1 {
         font-size: 1.4rem; /* Rimpiccioliamo leggermente il titolo */
+    }
+    .input-row {
+        flex-direction: column;
+        gap: 1.25rem;
     }
 }

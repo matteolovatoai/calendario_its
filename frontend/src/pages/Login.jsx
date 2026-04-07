@@ -73,10 +73,9 @@ const Login = () => {
                         <>
                             <div className="input-row">
                                 <div className="input-group">
-                                    <label>Nome</label>
                                     <input
                                         type="text"
-                                        placeholder="Mario"
+                                        placeholder="Nome"
                                         onChange={(e) =>
                                             setNome(e.target.value)
                                         }
@@ -84,10 +83,9 @@ const Login = () => {
                                     />
                                 </div>
                                 <div className="input-group">
-                                    <label>Cognome</label>
                                     <input
                                         type="text"
-                                        placeholder="Rossi"
+                                        placeholder="Cognome"
                                         onChange={(e) =>
                                             setCognome(e.target.value)
                                         }
@@ -96,7 +94,6 @@ const Login = () => {
                                 </div>
                             </div>
                             <div className="input-group">
-                                <label>Classe</label>
                                 <select
                                     className="modern-select"
                                     value={classe_id}
@@ -119,7 +116,6 @@ const Login = () => {
                     )}
 
                     <div className="input-group">
-                        <label>Email</label>
                         <input
                             type="email"
                             placeholder="nome.cognome@allievi.scuola.com"
@@ -128,7 +124,6 @@ const Login = () => {
                         />
                     </div>
                     <div className="input-group">
-                        <label>Password</label>
                         <input
                             type="password"
                             placeholder="••••••••"
