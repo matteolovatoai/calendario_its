@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { supabase } from "../supabaseClient";
 import { useAuth } from "../AuthContext";
+import Select from 'react-select';
 
 const Home = () => {
     const { utenteDB } = useAuth();
@@ -224,21 +225,56 @@ const Home = () => {
                         
                         <form onSubmit={handleSalvaLezione} className="modal-form">
                             <div className="input-group">
-                                <label>Materia, Docente e Classe</label>
-                                <select 
-                                    className="modern-select"
-                                    value={formData.modulo_docente_id}
-                                    onChange={(e) => setFormData({...formData, modulo_docente_id: e.target.value})}
-                                    required
-                                >
-                                    <option value="">Seleziona un'opzione...</option>
-                                    {opzioniModuli.map(opzione => (
-                                        <option key={opzione.id} value={opzione.id}>
-                                            {opzione.label}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+                            <label>Cerca Materia o Docente</label>
+                            <Select
+                                placeholder="Scrivi per cercare..."
+                                noOptionsMessage={() => "Nessun risultato trovato"}
+                                isClearable={true} // Aggiunge una comoda 'X' per svuotare il campo
+                                
+                                // react-select vuole le opzioni nel formato { value: ..., label: ... }
+                                options={opzioniModuli.map(opt => ({ 
+                                    value: opt.id, 
+                                    label: opt.label 
+                                }))}
+                                
+                                // Quando l'utente sceglie un'opzione, salviamo l'ID nel nostro formData
+                                onChange={(scelta) => setFormData({
+                                    ...formData, 
+                                    modulo_docente_id: scelta ? scelta.value : ""
+                                })}
+                                
+                                // Quando apri in "Modifica", dice a react-select cosa mostrare come pre-selezionato
+                                value={
+                                    formData.modulo_docente_id
+                                        ? {
+                                            value: formData.modulo_docente_id,
+                                            label: opzioniModuli.find(o => o.id === formData.modulo_docente_id)?.label || "Caricamento..."
+                                        }
+                                        : null
+                                }
+                                
+                                // Un pizzico di stile per farlo sembrare identico ai tuoi input attuali
+                                styles={{
+                                    control: (base, state) => ({
+                                        ...base,
+                                        borderRadius: '8px',
+                                        borderColor: state.isFocused ? '#4f46e5' : '#cbd5e1',
+                                        padding: '2px',
+                                        boxShadow: state.isFocused ? '0 0 0 3px rgba(79, 70, 229, 0.1)' : 'none',
+                                        backgroundColor: '#f8fafc',
+                                        cursor: 'text',
+                                        transition: 'all 0.2s ease'
+                                    }),
+                                    option: (base, state) => ({
+                                        ...base,
+                                        backgroundColor: state.isFocused ? '#f1f5f9' : 'white',
+                                        color: state.isSelected ? '#4f46e5' : '#1e293b',
+                                        fontWeight: state.isSelected ? '600' : '400',
+                                        cursor: 'pointer'
+                                    })
+                                }}
+                            />
+                        </div>
 
                             <div className="form-row">
                                 <div className="input-group">
