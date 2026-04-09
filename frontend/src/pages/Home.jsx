@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { supabase } from "../supabaseClient";
 import { useAuth } from "../AuthContext";
+import Select from "react-select";
 
 const Home = () => {
     const { utenteDB } = useAuth();
@@ -263,19 +264,25 @@ const Home = () => {
                             <form onSubmit={handleSalvaLezione} className="modal-form">
                                 <div className="input-group">
                                     <label>Materia, Docente e Classe</label>
-                                    <select 
-                                        className="modern-select"
-                                        value={formData.modulo_docente_id}
-                                        onChange={(e) => setFormData({...formData, modulo_docente_id: e.target.value})}
+                                    <Select
+                                        // Mappiamo le tue opzioni nel formato richiesto da react-select
+                                        options={opzioniModuli.map(opt => ({ value: opt.id, label: opt.label }))}
+                                        
+                                        // Cerchiamo l'oggetto completo corrispondente all'ID salvato nello stato
+                                        value={opzioniModuli.map(opt => ({ value: opt.id, label: opt.label }))
+                                            .find(opt => opt.value === formData.modulo_docente_id) || null}
+                                        
+                                        // Quando l'utente sceglie, salviamo solo l'ID (value) nello stato
+                                        onChange={(selectedOption) => setFormData({
+                                            ...formData, 
+                                            modulo_docente_id: selectedOption ? selectedOption.value : ""
+                                        })}
+                                        
+                                        placeholder="Cerca docente o materia..."
+                                        isClearable={true}
+                                        isSearchable={true}
                                         required
-                                    >
-                                        <option value="">Seleziona un'opzione...</option>
-                                        {opzioniModuli.map(opzione => (
-                                            <option key={opzione.id} value={opzione.id}>
-                                                {opzione.label}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    />
                                 </div>
 
                                 <div className="form-row">
