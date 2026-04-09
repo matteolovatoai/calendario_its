@@ -24,17 +24,13 @@ app.add_middleware(
 )
 
 @app.get("/lezioni/")
-def get_lezione(session: Session = Depends(get_session), inizio: datetime | None = None, fine: datetime | None = None, classe_id: int | None = None, current_user: Utente = Depends(get_current_user)):
+def get_lezione(session: Session = Depends(get_session), inizio: datetime | None = None, fine: datetime | None = None, classe_id: int | None = None):
     statement = select(Lezione, Modulo.nome, Docente.cognome).select_from(Lezione).join(Modulo_docente).join(Docente).join(Modulo_classe).join(Modulo)
     if inizio:
         statement = statement.where(Lezione.inizio >= inizio)
     if fine:
         statement = statement.where(Lezione.fine <= fine)
-    if current_user.ruolo == RuoloAccesso.studente:
-        statement = statement.where(Modulo_classe.classe_id == current_user.classe_id)
-    # se segreteria allora prende la classe dal menu a tendina
-    if current_user.ruolo == RuoloAccesso.segreteria:
-        statement = statement.where(Modulo_classe.classe_id == classe_id)
+    statement = statement.where(Modulo_classe.classe_id == classe_id)
     results = session.exec(statement).all()
 
     output = []
