@@ -26,11 +26,6 @@ function App() {
         return () => subscription.unsubscribe();
     }, []);
 
-    // Se non c'è sessione, mostriamo solo il login (niente Navbar o altro)
-    if (!session) {
-        return <Login />;
-    }
-
     return (
         <AuthProvider>
             <Router>
@@ -38,6 +33,7 @@ function App() {
                     <Navbar session={session} />
                     <Routes>
                         <Route path="/" element={<Home session={session} />} />
+                        <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<div>Dashboard</div>} />
                     </Routes>
                 </div>

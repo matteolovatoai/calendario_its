@@ -3,10 +3,16 @@ import { supabase } from "../supabaseClient";
 import { useAuth } from '../AuthContext';
 
 const Navbar = ({ session }) => {
-    const { utenteDB } = useAuth()
+    const { utenteDB } = useAuth();
     const handleLogout = async () => {
         const { error } = await supabase.auth.signOut();
-        if (error) console.error("Errore durante il logout:", error.message);
+        if (error) {
+            console.error("Errore durante il logout:", error.message);
+        } else {
+            // Forza il ricaricamento della pagina (o il reindirizzamento)
+            // L'opzione migliore per pulire tutto è ricaricare dalla radice:
+            window.location.href = "/"; 
+        }
     };
 
     return (
@@ -17,10 +23,10 @@ const Navbar = ({ session }) => {
                     <h1>Registro orario</h1>
                 </div>
             </Link>
+            
             <div className="nav-links">
-
-                {/* Mostriamo l'email dell'utente e il tasto Logout se loggato */}
-                {session && (
+                {session ? (
+                    /* Utente loggato: mostra nome e tasto Esci */
                     <div className="user-menu">
                         <span>
                             {utenteDB?.nome} {utenteDB?.cognome}
@@ -29,6 +35,11 @@ const Navbar = ({ session }) => {
                             Esci
                         </button>
                     </div>
+                ) : (
+                    /* Utente NON loggato: mostra tasto Area Riservata */
+                    <Link to="/login" className="login-btn" style={{ textDecoration: "none" }}>
+                        Area Riservata
+                    </Link>
                 )}
             </div>
         </nav>

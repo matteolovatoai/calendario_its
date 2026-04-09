@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 const Login = () => {
+    const navigate = useNavigate();
     const [isRegistering, setIsRegistering] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -14,7 +16,6 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [acceptTerms, setAcceptTerms] = useState(false);
 
-    // Carica le classi per il menu a tendina (solo se stiamo registrando)
     useEffect(() => {
         if (isRegistering) {
             axios
@@ -55,7 +56,12 @@ const Login = () => {
                 email,
                 password,
             });
-            if (error) alert(error.message);
+            if (error) {
+                alert(error.message);
+            } else {
+                // Se il login va a buon fine, rimanda alla Home
+                navigate("/"); 
+            }
         }
         setLoading(false);
     };
@@ -73,42 +79,17 @@ const Login = () => {
                         <>
                             <div className="input-row">
                                 <div className="input-group">
-                                    <input
-                                        type="text"
-                                        placeholder="Nome"
-                                        onChange={(e) =>
-                                            setNome(e.target.value)
-                                        }
-                                        required
-                                    />
+                                    <input type="text" placeholder="Nome" onChange={(e) => setNome(e.target.value)} required />
                                 </div>
                                 <div className="input-group">
-                                    <input
-                                        type="text"
-                                        placeholder="Cognome"
-                                        onChange={(e) =>
-                                            setCognome(e.target.value)
-                                        }
-                                        required
-                                    />
+                                    <input type="text" placeholder="Cognome" onChange={(e) => setCognome(e.target.value)} required />
                                 </div>
                             </div>
                             <div className="input-group">
-                                <select
-                                    className="modern-select"
-                                    value={classe_id}
-                                    onChange={(e) =>
-                                        setClasseId(e.target.value)
-                                    }
-                                    required
-                                >
-                                    <option value="">
-                                        Seleziona la tua classe
-                                    </option>
+                                <select className="modern-select" value={classe_id} onChange={(e) => setClasseId(e.target.value)} required >
+                                    <option value="">Seleziona la tua classe</option>
                                     {classi.map((c) => (
-                                        <option key={c.id} value={c.id}>
-                                            {c.nome}
-                                        </option>
+                                        <option key={c.id} value={c.id}>{c.nome}</option>
                                     ))}
                                 </select>
                             </div>
@@ -116,62 +97,27 @@ const Login = () => {
                     )}
 
                     <div className="input-group">
-                        <input
-                            type="email"
-                            placeholder="nome.cognome@allievi.scuola.com"
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
+                        <input type="email" placeholder="nome.cognome@allievi.scuola.com" onChange={(e) => setEmail(e.target.value)} required />
                     </div>
                     <div className="input-group">
-                        <input
-                            type="password"
-                            placeholder="••••••••"
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
+                        <input type="password" placeholder="••••••••" onChange={(e) => setPassword(e.target.value)} required />
                     </div>
                     {isRegistering && (
                         <div className="checkbox-group">
-                            <input
-                                type="checkbox"
-                                id="privacy"
-                                checked={acceptTerms}
-                                onChange={(e) =>
-                                    setAcceptTerms(e.target.checked)
-                                }
-                                required
-                            />
+                            <input type="checkbox" id="privacy" checked={acceptTerms} onChange={(e) => setAcceptTerms(e.target.checked)} required />
                             <label htmlFor="privacy">
-                                Accetto l'{" "}
-                                <a href="/privacy-policy" target="_blank">
-                                    informativa sulla privacy
-                                </a>{" "}
-                                e il trattamento dei dati personali.
+                                Accetto l' <a href="/privacy-policy" target="_blank">informativa sulla privacy</a> e il trattamento dei dati personali.
                             </label>
                         </div>
                     )}
-                    <button
-                        type="submit"
-                        className="auth-submit"
-                        disabled={loading}
-                    >
-                        {loading
-                            ? "Caricamento..."
-                            : isRegistering
-                              ? "Registrati"
-                              : "Accedi"}
+                    <button type="submit" className="auth-submit" disabled={loading}>
+                        {loading ? "Caricamento..." : isRegistering ? "Registrati" : "Accedi"}
                     </button>
                 </form>
 
                 <div className="auth-footer">
-                    <button
-                        onClick={() => setIsRegistering(!isRegistering)}
-                        className="toggle-auth"
-                    >
-                        {isRegistering
-                            ? "Hai già un account? Accedi"
-                            : "Nuovo studente? Registrati"}
+                    <button onClick={() => setIsRegistering(!isRegistering)} className="toggle-auth">
+                        {isRegistering ? "Hai già un account? Accedi" : "Nuovo studente? Registrati"}
                     </button>
                 </div>
             </div>
