@@ -97,7 +97,7 @@ const Home = () => {
                 inizio: lezioneSelezionata.inizio.slice(0, 16),
                 fine: lezioneSelezionata.fine.slice(0, 16),
                 aula: lezioneSelezionata.aula || "",
-                modulo_docente_id: lezioneSelezionata.modulo_docente_id || ""
+                modulo_nome: lezioneSelezionata.modulo_nome || ""
             });
         } else {
             setFormData({ inizio: "", fine: "", aula: "", modulo_docente_id: "" });
@@ -113,7 +113,7 @@ const Home = () => {
             inizio: evento.startStr,
             fine: evento.endStr,
             aula: evento.extendedProps.aula,
-            modulo_docente_id: evento.extendedProps.modulo_docente_id
+            modulo_nome: evento.extendedProps.modulo_nome
         });
         setIsModalOpen(true);
     };
@@ -264,7 +264,7 @@ const Home = () => {
                                     </p>
                                     
                                     <p style={{ margin: '8px 0', color: '#475569', fontSize: '0.95rem' }}>
-                                        <strong>Aula:</strong> {lezioneSelezionata.aula || "Non specificata"}
+                                        <strong>Modulo:</strong> {lezioneSelezionata.modulo_nome || "Non specificata"}
                                     </p>
                                     
                                 </div>

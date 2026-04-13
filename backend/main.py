@@ -35,12 +35,12 @@ def get_lezione(session: Session = Depends(get_session), inizio: datetime | None
 
     output = []
 
-    for lezione, materia_nome, docente_cognome in results:
+    for lezione, modulo_nome, docente_cognome in results:
         output.append({
             "id": lezione.id,
             "inizio": lezione.inizio,
             "fine": lezione.fine,
-            "materia": materia_nome,
+            "modulo_nome": modulo_nome,
             "docente_cognome": docente_cognome,
             "modulo_docente_id": lezione.modulo_docente_id,
             "aula": lezione.aula
